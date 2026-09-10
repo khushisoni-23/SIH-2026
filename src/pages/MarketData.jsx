@@ -43,8 +43,28 @@ export const MarketData = () => {
     try {
       const res = await marketService.getHistoricalData(filters);
       if (res) {
-        setTrends(res.trends || []);
-        setRecords(res.records || []);
+        const normalizedTrends = (res.trends || []).map((item) => ({
+          yearMonth: item.yearMonth || item.month || item.period || 'N/A',
+          BDI: item.BDI ?? item.bdi ?? item.bpi ?? 0,
+          BPI: item.BPI ?? item.bpi ?? 0,
+          BCI: item.BCI ?? item.bci ?? 0,
+          AusIndiaFreight: item.AusIndiaFreight ?? item.ausIndiaFreight ?? item.freightUSD ?? item.rateUSDMT ?? 0,
+          IdnIndiaFreight: item.IdnIndiaFreight ?? item.idnIndiaFreight ?? 0,
+        }));
+
+        const normalizedRecords = (res.records || []).map((item) => ({
+          id: item.id || item.transactionId || `REC-${Math.random().toString(16).slice(2, 8)}`,
+          date: item.date || 'N/A',
+          route: item.route || 'N/A',
+          vesselType: item.vesselType || 'N/A',
+          quantityMT: item.quantityMT ?? 75000,
+          freightUSD: item.freightUSD ?? item.rateUSDMT ?? 0,
+          bdi: item.bdi ?? 1940,
+          supplier: item.supplier || 'Market Feed',
+        }));
+
+        setTrends(normalizedTrends);
+        setRecords(normalizedRecords);
       }
     } catch (err) {
       console.warn("Market data API call failed, using fallback:", err.message);

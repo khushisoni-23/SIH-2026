@@ -38,6 +38,29 @@ export const FreightForecast = () => {
 
   const [forecastResult, setForecastResult] = useState(null);
 
+  const fallbackForecastFactors = [
+    { name: 'Seasonal Demand', impact: '+6.8%', weight: 0.75 },
+    { name: 'Port Congestion', impact: '+4.2%', weight: 0.61 },
+    { name: 'Bunker Cost Escalation', impact: '+3.1%', weight: 0.55 },
+    { name: 'Cargo Supply Tightness', impact: '+5.4%', weight: 0.68 },
+  ];
+
+  const normalizedForecastResult = forecastResult || {};
+  const forecastChartData = Array.isArray(normalizedForecastResult.chartData) ? normalizedForecastResult.chartData : [];
+  const forecastMetrics = {
+    currentRate: normalizedForecastResult.currentRate ?? 24.8,
+    predictedRate30D: normalizedForecastResult.predictedRate30D ?? 27.2,
+    predictedRate60D: normalizedForecastResult.predictedRate60D ?? 29.1,
+    predictedRate90D: normalizedForecastResult.predictedRate90D ?? 26.4,
+    rateChangePct30D: normalizedForecastResult.rateChangePct30D ?? 9.68,
+    confidenceScore: normalizedForecastResult.confidenceScore ?? 86,
+    marketStance: normalizedForecastResult.marketStance ?? 'Bullish',
+    recommendation: normalizedForecastResult.recommendation ?? 'Consider entering the charter market early within 7 days. Spot rate escalation is predicted to peak in late October before moderating in December.',
+    forecastFactors: Array.isArray(normalizedForecastResult.forecastFactors) && normalizedForecastResult.forecastFactors.length
+      ? normalizedForecastResult.forecastFactors
+      : fallbackForecastFactors,
+  };
+
   useEffect(() => {
     handleGenerateForecast();
   }, []);
@@ -194,31 +217,31 @@ export const FreightForecast = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <div className="glass-card rounded-xl p-4 border border-slate-800">
                 <div className="text-xs text-slate-400 font-semibold uppercase">Current Spot Rate</div>
-                <div className="text-2xl font-bold text-slate-100 mt-1">${forecastResult.currentRate} / MT</div>
+                <div className="text-2xl font-bold text-slate-100 mt-1">${forecastMetrics.currentRate} / MT</div>
                 <div className="text-[11px] text-slate-400 mt-1">Base Benchmark</div>
               </div>
 
               <div className="glass-card rounded-xl p-4 border border-slate-800">
                 <div className="text-xs text-slate-400 font-semibold uppercase">30-Day Forecast</div>
-                <div className="text-2xl font-bold text-amber-400 mt-1">${forecastResult.predictedRate30D} / MT</div>
-                <div className="text-[11px] text-amber-400 mt-1">+{forecastResult.rateChangePct30D}% Escalation</div>
+                <div className="text-2xl font-bold text-amber-400 mt-1">${forecastMetrics.predictedRate30D} / MT</div>
+                <div className="text-[11px] text-amber-400 mt-1">+{forecastMetrics.rateChangePct30D}% Escalation</div>
               </div>
 
               <div className="glass-card rounded-xl p-4 border border-slate-800">
                 <div className="text-xs text-slate-400 font-semibold uppercase">60-Day Forecast</div>
-                <div className="text-2xl font-bold text-rose-400 mt-1">${forecastResult.predictedRate60D} / MT</div>
+                <div className="text-2xl font-bold text-rose-400 mt-1">${forecastMetrics.predictedRate60D} / MT</div>
                 <div className="text-[11px] text-slate-400 mt-1">Peak Escalation</div>
               </div>
 
               <div className="glass-card rounded-xl p-4 border border-slate-800">
                 <div className="text-xs text-slate-400 font-semibold uppercase">90-Day Forecast</div>
-                <div className="text-2xl font-bold text-emerald-400 mt-1">${forecastResult.predictedRate90D} / MT</div>
+                <div className="text-2xl font-bold text-emerald-400 mt-1">${forecastMetrics.predictedRate90D} / MT</div>
                 <div className="text-[11px] text-slate-400 mt-1">Q4 Moderation</div>
               </div>
 
               <div className="glass-card rounded-xl p-4 border border-cyan-500/30 bg-cyan-500/5">
                 <div className="text-xs text-cyan-300 font-semibold uppercase">Model Confidence</div>
-                <div className="text-2xl font-bold text-cyan-200 mt-1">{forecastResult.confidenceScore}%</div>
+                <div className="text-2xl font-bold text-cyan-200 mt-1">{forecastMetrics.confidenceScore}%</div>
                 <div className="text-[11px] text-cyan-400 mt-1">High Statistical Accuracy</div>
               </div>
             </div>
@@ -233,7 +256,7 @@ export const FreightForecast = () => {
                   lastUpdated="10 Sep 2026"
                 >
                   <ResponsiveContainer width="100%" height={340}>
-                    <AreaChart data={forecastResult.chartData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                    <AreaChart data={forecastChartData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorML" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
@@ -286,7 +309,7 @@ export const FreightForecast = () => {
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">Market Condition</h3>
                     <span className="px-2.5 py-0.5 text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full">
-                      {forecastResult.marketStance.toUpperCase()}
+                      {forecastMetrics.marketStance.toUpperCase()}
                     </span>
                   </div>
 
@@ -295,7 +318,7 @@ export const FreightForecast = () => {
                       <CheckCircle2 size={14} />
                       Strategic Guidance
                     </div>
-                    {forecastResult.recommendation}
+                    {forecastMetrics.recommendation}
                   </div>
                 </div>
 
@@ -307,7 +330,7 @@ export const FreightForecast = () => {
                   </h3>
 
                   <div className="space-y-3">
-                    {forecastResult.forecastFactors.map((factor, idx) => (
+                    {forecastMetrics.forecastFactors.map((factor, idx) => (
                       <div key={idx} className="space-y-1">
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-slate-300 font-medium">{factor.name}</span>

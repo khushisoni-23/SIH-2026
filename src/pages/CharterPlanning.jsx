@@ -40,34 +40,98 @@ export const CharterPlanning = () => {
 
   const [charterPlan, setCharterPlan] = useState(null);
 
+  const normalizeCharterPlan = (plan, inputData) => {
+    const cargoRequirementMT = Number(plan?.cargoRequirementMT ?? inputData.cargoRequirementMT ?? 600000);
+    const numberOfVoyages = Number(plan?.numberOfVoyages ?? inputData.numberOfVoyages ?? 8);
+    const recommendation = plan?.recommendation || {};
+    const contractRateAgreedUSD = Number(recommendation.contractRateAgreedUSD ?? 23.95);
+    const spotRateAvgForecastUSD = Number(recommendation.spotRateAvgForecastUSD ?? 27.2);
+    const totalContractCostUSD = Number(recommendation.totalContractCostUSD ?? cargoRequirementMT * contractRateAgreedUSD);
+    const estimatedSavingVsSpotUSD = Number(
+      recommendation.estimatedSavingVsSpotUSD ?? cargoRequirementMT * (spotRateAvgForecastUSD - contractRateAgreedUSD)
+    );
+    const savingPercentage = Number(
+      recommendation.savingPercentage ?? ((estimatedSavingVsSpotUSD / (cargoRequirementMT * spotRateAvgForecastUSD)) * 100)
+    );
+
+    const laycanWindows = [
+      ['01 Oct 2026', '05 Oct 2026'],
+      ['20 Oct 2026', '25 Oct 2026'],
+      ['10 Nov 2026', '15 Nov 2026'],
+      ['01 Dec 2026', '05 Dec 2026'],
+      ['22 Dec 2026', '26 Dec 2026'],
+      ['12 Jan 2027', '16 Jan 2027'],
+      ['02 Feb 2027', '06 Feb 2027'],
+      ['20 Feb 2027', '24 Feb 2027'],
+    ];
+
+    const voyageTimeline = Array.isArray(plan?.voyageTimeline) && plan.voyageTimeline.length
+      ? plan.voyageTimeline.map((item, idx) => ({
+          ...item,
+          voyageNo: item.voyageNo ?? idx + 1,
+          laycanStart: item.laycanStart ?? laycanWindows[idx]?.[0] ?? 'TBD',
+          laycanEnd: item.laycanEnd ?? laycanWindows[idx]?.[1] ?? 'TBD',
+          loadingPort: item.loadingPort ?? inputData.origin ?? 'Australia (Hay Point)',
+          dischargePort: item.dischargePort ?? inputData.destination ?? 'Paradip Port',
+          cargoMT: Number(item.cargoMT ?? Math.round(cargoRequirementMT / Math.max(numberOfVoyages, 1))),
+          status: item.status ?? (idx < 3 ? 'Scheduled' : idx < 5 ? 'Planned' : 'Draft'),
+        }))
+      : Array.from({ length: numberOfVoyages }, (_, idx) => ({
+          voyageNo: idx + 1,
+          laycanStart: laycanWindows[idx]?.[0] ?? 'TBD',
+          laycanEnd: laycanWindows[idx]?.[1] ?? 'TBD',
+          loadingPort: inputData.origin ?? 'Australia (Hay Point)',
+          dischargePort: inputData.destination ?? 'Paradip Port',
+          cargoMT: Math.round(cargoRequirementMT / Math.max(numberOfVoyages, 1)),
+          status: idx < 3 ? 'Scheduled' : idx < 5 ? 'Planned' : 'Draft',
+        }));
+
+    return {
+      ...plan,
+      cargoRequirementMT,
+      numberOfVoyages,
+      recommendationSummary: plan?.recommendationSummary || [
+        'Fix 65% of volume via 6-month COA with Baltic index-linked floor/ceiling clause.',
+        'Utilize spot market for remaining 35% during anticipated Q4 rate dips.',
+        'Bundle Paradip and Vizag discharge calls to negotiate $0.80/MT carrier discount.',
+      ],
+      recommendation: {
+        ...recommendation,
+        contractType: recommendation.contractType ?? 'COA Contract',
+        marketEntryWindow: recommendation.marketEntryWindow ?? 'Within 7 days',
+        contractRateAgreedUSD,
+        spotRateAvgForecastUSD,
+        totalContractCostUSD,
+        estimatedSavingVsSpotUSD,
+        savingPercentage,
+        demurrageExposureReductionPct: recommendation.demurrageExposureReductionPct ?? 18,
+      },
+      voyageTimeline,
+    };
+  };
+
   const fetchPlan = async (inputData) => {
     setLoading(true);
     try {
       const res = await charterService.getCharterPlan(inputData);
       if (res && res.data) {
-        setCharterPlan(res.data);
+        setCharterPlan(normalizeCharterPlan(res.data, inputData));
       }
     } catch (err) {
       console.warn("Charter plan API call failed, using fallback:", err.message);
-      setCharterPlan({
-        optimalSplit: { spotPct: 35, coaPct: 65 },
-        estimatedCostSpot: 5208000,
-        estimatedCostCOA: 9672000,
-        estimatedTotalCost: 14880000,
-        spotSavingsVs100SpotUSD: 840000,
-        savingsPct: 5.34,
-        voyageAllocations: [
-          { voyageNo: 1, laycanWindow: '01 Oct - 05 Oct', charterType: 'COA Contract', recommendedVessel: 'Panamax (75k DWT)', estFreightRate: 24.80, costUSD: 1488000, riskLevel: 'Low' },
-          { voyageNo: 2, laycanWindow: '20 Oct - 25 Oct', charterType: 'COA Contract', recommendedVessel: 'Panamax (75k DWT)', estFreightRate: 24.80, costUSD: 1488000, riskLevel: 'Low' },
-          { voyageNo: 3, laycanWindow: '10 Nov - 15 Nov', charterType: 'Spot Charter', recommendedVessel: 'Capesize (180k DWT)', estFreightRate: 22.10, costUSD: 3315000, riskLevel: 'Medium' },
-          { voyageNo: 4, laycanWindow: '01 Dec - 05 Dec', charterType: 'COA Contract', recommendedVessel: 'Panamax (75k DWT)', estFreightRate: 24.80, costUSD: 1488000, riskLevel: 'Low' },
-        ],
+      setCharterPlan(normalizeCharterPlan({
+        cargoRequirementMT: inputData.cargoRequirementMT,
+        numberOfVoyages: inputData.numberOfVoyages,
+        origin: inputData.origin,
+        destination: inputData.destination,
+        contractDuration: inputData.contractDuration,
+        preferredVessel: inputData.preferredVessel,
         recommendationSummary: [
           'Fix 65% of volume via 6-month COA with Baltic index-linked floor/ceiling clause.',
           'Utilize spot market for remaining 35% during anticipated Q4 rate dips.',
           'Bundle Paradip and Vizag discharge calls to negotiate $0.80/MT carrier discount.',
         ]
-      });
+      }, inputData));
     } finally {
       setLoading(false);
     }

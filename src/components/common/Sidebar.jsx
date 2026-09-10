@@ -39,16 +39,16 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
 
       {/* Sidebar */}
       <aside
-        style={{ background: 'var(--color-bg-sidebar)' }}
-        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col transition-all duration-300 ${
+        style={{ background: 'linear-gradient(180deg, rgba(13, 23, 38, 0.98) 0%, rgba(9, 18, 29, 0.98) 100%)' }}
+        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col transition-all duration-300 border-r shadow-2xl shadow-slate-950/30 ${
           isCollapsed ? 'w-[72px]' : 'w-60'
         } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center justify-between px-4 border-b sidebar-border" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="h-16 flex items-center justify-between px-4 border-b sidebar-border" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.18), rgba(15, 23, 42, 0))' }}>
           <NavLink to="/" className="flex items-center gap-2.5 overflow-hidden" onClick={closeMobile}>
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shrink-0">
-              <Ship className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl border border-cyan-300/40 bg-gradient-to-br from-cyan-400 via-sky-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 ring-1 ring-white/10 shrink-0">
+              <Ship className="w-5 h-5 drop-shadow-[0_1px_1px_rgba(15,23,42,0.6)]" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
@@ -89,7 +89,7 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
                 className={({ isActive }) =>
                   `flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${
                     isActive
-                      ? 'bg-[#1d68bd] text-white shadow-md shadow-blue-900/30'
+                      ? 'bg-gradient-to-r from-cyan-500/20 to-blue-600/15 text-white shadow-md shadow-blue-900/30 border border-cyan-400/30'
                       : 'text-slate-300 hover:text-white hover:bg-white/8'
                   }`
                 }
@@ -123,7 +123,7 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
             className={({ isActive }) =>
               `flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-[#1d68bd] text-white shadow-md'
+                  ? 'bg-gradient-to-r from-cyan-500/20 to-blue-600/15 text-white shadow-md border border-cyan-400/30'
                   : 'text-slate-300 hover:text-white hover:bg-white/8'
               }`
             }

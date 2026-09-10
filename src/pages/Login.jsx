@@ -49,9 +49,30 @@ export const Login = () => {
       <div className={`w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl border shadow-2xl overflow-hidden min-h-[580px] ${isLight ? 'bg-white border-slate-200' : 'bg-[#09152b] border-slate-800'}`}>
         
         {/* Left Side: Product Branding & Maritime Visual */}
-        <div className="lg:col-span-6 bg-gradient-to-br from-[#0a1936] via-[#0d2249] to-[#061024] p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800 text-white">
-          <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div
+          className="lg:col-span-6 p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800 text-white"
+          style={{
+            backgroundImage:
+              'linear-gradient(135deg, rgba(8,22,43,0.92), rgba(10,26,48,0.82) 32%, rgba(4,11,24,0.78)), radial-gradient(circle at top right, rgba(103,232,249,0.28), transparent 26%), radial-gradient(circle at bottom left, rgba(59,130,246,0.24), transparent 30%), url("/images/hero-ship.jpg")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'screen, normal, normal, normal'
+          }}
+        >
+          <div
+            className="absolute inset-0 scale-125 opacity-40 blur-[1.5px]"
+            style={{
+              backgroundImage: 'url("/images/hero-ship.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.14),transparent_25%)]" />
+          <div className="absolute inset-y-4 left-4 w-20 border-l border-t border-white/10 rounded-tl-2xl opacity-60" />
+          <div className="absolute inset-y-4 right-4 w-20 border-r border-b border-white/10 rounded-br-2xl opacity-60" />
+          <div className="absolute -left-16 -bottom-16 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -right-16 -top-16 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/15 via-transparent to-slate-950/40" />
 
           {/* Top Logo */}
           <div className="relative z-10">
@@ -156,7 +177,7 @@ export const Login = () => {
               </div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} autoComplete="off" className="space-y-4">
               {loginError && (
                 <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold flex items-center gap-2">
                   <AlertTriangle size={14} />
@@ -170,16 +191,21 @@ export const Login = () => {
                 <div className="relative">
                   <Mail className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${isLight ? 'text-slate-400' : 'text-slate-500'}`} />
                   <input
+                    id="login-email"
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="off"
+                    data-lpignore="true"
+                    data-1p-ignore="true"
+                    aria-label="Official Email Address"
                     placeholder="user@sail.gov.in"
                     style={{ paddingLeft: '2.5rem' }}
-                    className={`w-full py-2.5 px-3.5 rounded-xl text-xs font-semibold outline-none border transition-all ${
+                    className={`w-full py-2.5 px-3.5 rounded-xl text-xs font-semibold outline-none border transition-all shadow-[inset_0_0_0_1px_rgba(148,163,184,0.06)] ${
                       isLight 
                         ? 'bg-slate-50 border-slate-300 text-slate-900 focus:border-cyan-500' 
-                        : 'bg-slate-950/80 border-slate-800 text-slate-100 focus:border-cyan-500'
+                        : 'bg-slate-900/90 border-cyan-400/70 text-slate-50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30'
                     }`}
                   />
                 </div>
@@ -192,16 +218,31 @@ export const Login = () => {
                 <div className="relative">
                   <Lock className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${isLight ? 'text-slate-400' : 'text-slate-500'}`} />
                   <input
+                    id="login-password"
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                    className={`w-full py-2.5 px-3.5 rounded-xl text-xs font-semibold outline-none border transition-all ${
+                    name="securityPassphrase"
+                    autoComplete="off"
+                    data-lpignore="true"
+                    data-1p-ignore="true"
+                    spellCheck={false}
+                    inputMode="text"
+                    aria-label="Security Passphrase"
+                    placeholder="Enter your security passphrase / token"
+                    style={{
+                      paddingLeft: '2.5rem',
+                      paddingRight: '2.5rem',
+                      backgroundColor: isLight ? '#f8fafc' : '#0f172a',
+                      borderColor: isLight ? '#cbd5e1' : '#67e8f9',
+                      color: isLight ? '#0f172a' : '#f8fafc',
+                      boxShadow: isLight ? 'inset 0 0 0 1px rgba(148,163,184,0.08)' : 'inset 0 0 0 1px rgba(103,232,249,0.18), 0 0 0 2px rgba(34,211,238,0.16)'
+                    }}
+                    className={`w-full py-2.5 px-3.5 rounded-xl text-xs font-semibold outline-none border transition-all placeholder:text-slate-300 ${
                       isLight 
                         ? 'bg-slate-50 border-slate-300 text-slate-900 focus:border-cyan-500' 
-                        : 'bg-slate-950/80 border-slate-800 text-slate-100 focus:border-cyan-500'
+                        : 'bg-slate-900/95 border-cyan-400/80 text-slate-50 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30'
                     }`}
                   />
                   <button

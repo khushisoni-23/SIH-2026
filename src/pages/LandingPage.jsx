@@ -166,8 +166,8 @@ export const LandingPage = () => {
       {/* STICKY TOP NAVBAR */}
       <nav className={`sticky top-0 z-50 min-h-16 py-2.5 px-4 lg:px-8 flex items-center gap-3 backdrop-blur-xl border-b ${isLight ? "bg-white/95 border-slate-200/90" : "bg-[#030712]/90 border-slate-800/80"}`}>
         <Link to="/" className="flex items-center gap-2.5 no-underline group shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-            <Ship className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 rounded-xl border border-cyan-300/40 bg-gradient-to-br from-cyan-400 via-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 ring-1 ring-white/10 group-hover:scale-105 transition-transform">
+            <Ship className="w-5 h-5 text-white drop-shadow-[0_1px_1px_rgba(15,23,42,0.6)]" />
           </div>
           <div className="hidden sm:block">
             <div className="flex items-center gap-1.5">

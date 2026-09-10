@@ -34,9 +34,9 @@ export const TopNavbar = ({ onOpenMobile }) => {
   return (
     <>
       <header
-        className="h-14 sticky top-0 z-30 px-4 lg:px-5 flex items-center justify-between gap-3 transition-colors"
+        className="h-14 sticky top-0 z-30 px-4 lg:px-5 flex items-center justify-between gap-3 transition-colors shadow-sm"
         style={{
-          background: 'var(--color-bg-navbar)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
           borderBottom: '1px solid var(--color-border)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
@@ -65,7 +65,7 @@ export const TopNavbar = ({ onOpenMobile }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ paddingLeft: '2.5rem', paddingRight: '1rem' }}
-              className="w-full py-1.5 rounded-lg text-xs font-medium outline-none transition-all"
+              className="w-full py-1.5 rounded-lg text-xs font-medium outline-none transition-all border border-slate-200/80 bg-white/60 dark:bg-slate-900/60 dark:border-slate-700"
             />
           </div>
         </div>
@@ -82,7 +82,7 @@ export const TopNavbar = ({ onOpenMobile }) => {
           <div className="relative">
             <button
               onClick={() => { setIsLangOpen(!isLangOpen); setIsProfileOpen(false); }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-black/5 dark:hover:bg-white/10 border border-slate-200 dark:border-slate-800"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:bg-black/5 dark:hover:bg-white/10 border border-slate-200/80 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40"
               style={{ color: 'var(--color-text-secondary)' }}
               title="Switch Language"
             >
@@ -123,7 +123,7 @@ export const TopNavbar = ({ onOpenMobile }) => {
           {/* Theme Toggle (Sun/Moon) */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg transition-all hover:bg-black/5 dark:hover:bg-white/10 border border-slate-200 dark:border-slate-800"
+            className="p-2 rounded-lg transition-all hover:bg-black/5 dark:hover:bg-white/10 border border-slate-200/80 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40"
             style={{ color: 'var(--color-text-secondary)' }}
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             aria-label="Toggle Theme"
@@ -138,7 +138,7 @@ export const TopNavbar = ({ onOpenMobile }) => {
           {/* Notifications Bell */}
           <button
             onClick={() => setIsNotificationsOpen(true)}
-            className="relative p-2 rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/10 border border-slate-200 dark:border-slate-800"
+            className="relative p-2 rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/10 border border-slate-200/80 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40"
             style={{ color: 'var(--color-text-secondary)' }}
             title="Alerts"
             aria-label="Notifications"
@@ -153,7 +153,7 @@ export const TopNavbar = ({ onOpenMobile }) => {
           <div className="relative">
             <button
               onClick={() => { setIsProfileOpen(!isProfileOpen); setIsLangOpen(false); }}
-              className="flex items-center gap-2 px-2 py-1 rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+              className="flex items-center gap-2 px-2 py-1 rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/10 border border-transparent hover:border-slate-200/80 dark:hover:border-slate-700"
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-md shrink-0">
                 {initials}

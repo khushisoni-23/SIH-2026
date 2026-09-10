@@ -31,10 +31,16 @@ export const Signup = () => {
 
   const update = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
+  const handlePhoneChange = (e) => {
+    const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+    update('phone', digitsOnly);
+  };
+
   const validate = () => {
     const e = {};
     if (!form.fullName.trim()) e.fullName = 'Full name is required';
     if (!form.email.includes('@')) e.email = 'Enter a valid email';
+    if (form.phone && !/^\d{10}$/.test(form.phone)) e.phone = 'Enter a valid 10-digit Indian phone number';
     if (form.password.length < 8) e.password = 'Password must be at least 8 characters';
     if (form.password !== form.confirmPassword) e.confirmPassword = 'Passwords do not match';
     setErrors(e);
@@ -59,7 +65,7 @@ export const Signup = () => {
   const inputClass = `w-full py-2.5 px-3.5 rounded-xl text-xs font-semibold outline-none border transition-all ${
     isLight
       ? 'bg-slate-50 border-slate-300 text-slate-900 focus:border-cyan-500 placeholder-slate-400'
-      : 'bg-slate-950/80 border-slate-800 text-slate-100 focus:border-cyan-500 placeholder-slate-600'
+      : 'bg-slate-900/95 border-cyan-400/80 text-slate-50 placeholder-slate-300 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30'
   }`;
 
   const labelClass = `block text-xs font-bold uppercase tracking-wider mb-1.5 ${isLight ? 'text-slate-700' : 'text-slate-300'}`;
@@ -69,9 +75,31 @@ export const Signup = () => {
       <div className={`w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 rounded-3xl border shadow-2xl overflow-hidden ${isLight ? 'bg-white border-slate-200' : 'bg-[#09152b] border-slate-800'}`}>
 
         {/* Left Side: Brand Panel */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-[#0a1936] via-[#0d2249] to-[#061024] p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800 text-white">
-          <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div
+          className="lg:col-span-5 p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800 text-white"
+          style={{
+            backgroundImage:
+              'linear-gradient(135deg, rgba(5,15,30,0.88), rgba(8,25,49,0.76) 34%, rgba(2,6,23,0.84)), radial-gradient(circle at top right, rgba(103,232,249,0.20), transparent 24%), radial-gradient(circle at bottom left, rgba(59,130,246,0.18), transparent 28%), url("/images/hero-ship.jpg")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'multiply, normal, normal, normal'
+          }}
+        >
+          <div
+            className="absolute inset-0 scale-125 opacity-55"
+            style={{
+              backgroundImage: 'url("/images/hero-ship.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'brightness(0.62) saturate(0.82) contrast(1.12)'
+            }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.14),transparent_25%)]" />
+          <div className="absolute inset-y-4 left-4 w-20 border-l border-t border-white/10 rounded-tl-2xl opacity-60" />
+          <div className="absolute inset-y-4 right-4 w-20 border-r border-b border-white/10 rounded-br-2xl opacity-60" />
+          <div className="absolute -left-16 -bottom-16 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -right-16 -top-16 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/15 via-transparent to-slate-950/40" />
 
           {/* Logo */}
           <div className="relative z-10">
@@ -92,10 +120,13 @@ export const Signup = () => {
               SIH 2026 Enterprise Procurement System
             </div>
 
-            <h2 className="text-2xl lg:text-3xl font-black text-white leading-tight mb-3">
+            <h2
+              className="text-2xl lg:text-3xl font-black text-white leading-tight mb-3"
+              style={{ textShadow: '0 4px 24px rgba(15, 23, 42, 0.85)' }}
+            >
               Join FreightSense Enterprise
             </h2>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-xs">
+            <p className="text-xs text-slate-100 leading-relaxed max-w-xs" style={{ textShadow: '0 2px 16px rgba(15, 23, 42, 0.8)' }}>
               Register as an authorized procurement officer for SAIL or Ministry of Steel to access full AI-powered vessel chartering and freight forecasting capabilities.
             </p>
           </div>
@@ -221,11 +252,23 @@ export const Signup = () => {
                     <input
                       type="tel"
                       value={form.phone}
-                      onChange={e => update('phone', e.target.value)}
+                      onChange={handlePhoneChange}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      autoComplete="tel"
+                      aria-label="Contact Number"
+                      spellCheck={false}
                       placeholder="+91 XXXXX XXXXX"
-                      style={{ paddingLeft: '2.5rem' }}
+                      style={{
+                        paddingLeft: '2.5rem',
+                        backgroundColor: '#0f172a',
+                        borderColor: '#67e8f9',
+                        color: '#f8fafc',
+                        boxShadow: 'inset 0 0 0 1px rgba(103, 232, 249, 0.18), 0 0 0 2px rgba(34, 211, 238, 0.12)'
+                      }}
                       className={inputClass}
                     />
+                    {errors.phone && <p className="text-rose-400 text-[10px] mt-1">{errors.phone}</p>}
                   </div>
                 </div>
               </div>
@@ -241,9 +284,10 @@ export const Signup = () => {
                       required
                       value={form.password}
                       onChange={e => update('password', e.target.value)}
+                      autoComplete="new-password"
                       placeholder="Min. 8 characters"
                       style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                      className={inputClass}
+                      className={`${inputClass} shadow-[inset_0_0_0_1px_rgba(148,163,184,0.06)] ${isLight ? '' : 'focus:ring-2 focus:ring-cyan-500/20'}`}
                     />
                     <button
                       type="button"
@@ -265,9 +309,10 @@ export const Signup = () => {
                       required
                       value={form.confirmPassword}
                       onChange={e => update('confirmPassword', e.target.value)}
+                      autoComplete="new-password"
                       placeholder="Re-enter passphrase"
                       style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                      className={inputClass}
+                      className={`${inputClass} shadow-[inset_0_0_0_1px_rgba(148,163,184,0.06)] ${isLight ? '' : 'focus:ring-2 focus:ring-cyan-500/20'}`}
                     />
                     <button
                       type="button"
