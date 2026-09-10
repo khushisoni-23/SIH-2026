@@ -11,6 +11,7 @@ import {
 
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { freightService } from '../services/freightService';
 import { portService } from '../services/portService';
 import { alertService } from '../services/alertService';
@@ -21,6 +22,7 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const { user } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [freightSummary, setFreightSummary] = useState(null);
@@ -121,9 +123,9 @@ export const Dashboard = () => {
           {/* Left Text Info (7 cols) */}
           <div className="lg:col-span-7 p-6 lg:p-8 space-y-3 z-10 flex flex-col justify-center">
             <div className="flex items-center gap-2 text-cyan-400 text-xs font-semibold">
-              <span>Welcome back, <strong className="text-white">Khushi Soni</strong> 👋</span>
+              <span>Welcome back, <strong className="text-white">{user?.fullName || 'Logistics Officer'}</strong> 👋</span>
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-              <span className="text-slate-300">SAIL Maritime Logistics</span>
+              <span className="text-slate-300">{user?.organization || 'SAIL Maritime Logistics'}</span>
             </div>
 
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">

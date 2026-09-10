@@ -3,13 +3,15 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
   Ship, Lock, Mail, ShieldCheck, ArrowRight, Eye, EyeOff,
   Sparkles, CheckCircle2, User, Briefcase, Building2, Phone,
-  UserPlus
+  UserPlus, AlertTriangle
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Signup = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { signup: authSignup } = useAuth();
   const isLight = theme === 'light';
 
   const [form, setForm] = useState({
@@ -25,6 +27,7 @@ export const Signup = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
 
   const update = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
@@ -38,14 +41,19 @@ export const Signup = () => {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    setServerError('');
+    try {
+      await authSignup(form);
       navigate('/dashboard');
-    }, 600);
+    } catch (err) {
+      setServerError(err.message || 'Signup failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const inputClass = `w-full py-2.5 px-3.5 rounded-xl text-xs font-semibold outline-none border transition-all ${
@@ -130,6 +138,12 @@ export const Signup = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {serverError && (
+                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{serverError}</span>
+                </div>
+              )}
               {/* Row 1: Full Name + Designation */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

@@ -1,22 +1,17 @@
-import { historicalIndexTrends, historicalRecordsTable, marketMetadata } from '../data/mockMarketData';
+/**
+ * marketService — fetches from Express backend (GET /api/market)
+ * Mock data imports have been removed.
+ */
+import api from './api';
 
 export const marketService = {
   getHistoricalData: async (filters = {}) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let records = [...historicalRecordsTable];
-        if (filters.route && filters.route !== 'All') {
-          records = records.filter(r => r.route.includes(filters.route));
-        }
-        if (filters.vesselType && filters.vesselType !== 'All') {
-          records = records.filter(r => r.vesselType === filters.vesselType);
-        }
-        resolve({
-          trends: historicalIndexTrends,
-          records,
-          metadata: marketMetadata
-        });
-      }, 200);
-    });
-  }
+    const res = await api.get('/market', { params: filters });
+    return {
+      trends: res.data.trends,
+      records: res.data.records,
+      dataStatus: res.data.dataStatus,
+      dataNote: res.data.dataNote,
+    };
+  },
 };

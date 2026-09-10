@@ -45,9 +45,16 @@ export const RiskAlerts = () => {
 
   const fetchAlerts = async () => {
     setLoading(true);
-    const res = await alertService.getAlerts();
-    setAlerts(res.data);
-    setLoading(false);
+    try {
+      const res = await alertService.getAlerts();
+      if (res && res.data) {
+        setAlerts(res.data);
+      }
+    } catch (err) {
+      console.warn("Alerts API call failed:", err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

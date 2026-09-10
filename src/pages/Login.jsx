@@ -4,26 +4,34 @@ import { Ship, Lock, Mail, ShieldCheck, Anchor, TrendingUp, AlertTriangle, Arrow
 import { DataSourceBadge } from '../components/common/DataSourceBadge';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Login = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { language } = useLanguage();
+  const { login: authLogin } = useAuth();
   const isLight = theme === 'light';
 
-  const [email, setEmail] = useState('khushi.soni@sail.gov.in');
-  const [password, setPassword] = useState('Maritime2026#');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    setLoginError('');
+    try {
+      await authLogin(email, password);
       navigate('/dashboard');
-    }, 400);
+    } catch (err) {
+      setLoginError(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const autofillDemo = (role) => {
@@ -149,6 +157,12 @@ export const Login = () => {
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
+              {loginError && (
+                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold flex items-center gap-2">
+                  <AlertTriangle size={14} />
+                  {loginError}
+                </div>
+              )}
               <div>
                 <label className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ${isLight ? 'text-slate-700' : 'text-slate-300'}`}>
                   Official Email Address

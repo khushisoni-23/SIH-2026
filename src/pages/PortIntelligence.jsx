@@ -34,9 +34,16 @@ export const PortIntelligence = () => {
 
   const fetchPorts = async () => {
     setLoading(true);
-    const res = await portService.getAllPorts(filters);
-    setPorts(res.data);
-    setLoading(false);
+    try {
+      const res = await portService.getAllPorts(filters);
+      if (res && res.data) {
+        setPorts(res.data);
+      }
+    } catch (err) {
+      console.warn("Ports API call failed:", err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

@@ -1,41 +1,25 @@
-import { mockPorts, portMetadata } from '../data/mockPortData';
+/**
+ * portService — fetches from Express backend (GET /api/ports)
+ * Mock data imports have been removed. Data is served from MongoDB (DEMO-tagged records).
+ */
+import api from './api';
 
 export const portService = {
   getAllPorts: async (filters = {}) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let filtered = [...mockPorts];
-        if (filters.status && filters.status !== 'All') {
-          filtered = filtered.filter(p => p.status === filters.status);
-        }
-        if (filters.congestion && filters.congestion !== 'All') {
-          filtered = filtered.filter(p => p.currentCongestion === filters.congestion);
-        }
-        if (filters.minDraft) {
-          filtered = filtered.filter(p => p.maxDraft >= parseFloat(filters.minDraft));
-        }
-        if (filters.searchQuery) {
-          const q = filters.searchQuery.toLowerCase();
-          filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.state.toLowerCase().includes(q) || p.code.toLowerCase().includes(q));
-        }
-        resolve({
-          data: filtered,
-          totalCount: mockPorts.length,
-          metadata: portMetadata
-        });
-      }, 150);
-    });
+    const res = await api.get('/ports', { params: filters });
+    return {
+      data: res.data.data,
+      totalCount: res.data.totalCount,
+      dataStatus: res.data.dataStatus,
+      dataNote: res.data.dataNote,
+    };
   },
 
   getPortById: async (portId) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const found = mockPorts.find(p => p.id === portId) || mockPorts[0];
-        resolve({
-          data: found,
-          metadata: portMetadata
-        });
-      }, 100);
-    });
-  }
+    const res = await api.get(`/ports/${portId}`);
+    return {
+      data: res.data.data,
+      dataStatus: res.data.dataStatus,
+    };
+  },
 };

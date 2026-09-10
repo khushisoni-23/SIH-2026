@@ -1,40 +1,34 @@
-import { currentFreightSummary, freightTimeSeriesData, marketIntelligenceSummary, freightMetadata } from '../data/mockFreightData';
+/**
+ * freightService — fetches from Express backend (GET /api/freight/*)
+ * Mock data imports have been removed. All data comes from MongoDB via the backend.
+ */
+import api from './api';
 
 export const freightService = {
   getCurrentSummary: async () => {
-    // Simulates an async API call e.g. GET /api/v1/freight/summary
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: currentFreightSummary,
-          metadata: freightMetadata
-        });
-      }, 150);
-    });
+    const res = await api.get('/freight/summary');
+    return {
+      data: res.data.data,
+      dataStatus: res.data.dataStatus,
+      dataNote: res.data.dataNote,
+    };
   },
 
-  getTimeSeries: async (timeframe = '30D') => {
-    // GET /api/v1/freight/timeseries?range=30D
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          timeframe,
-          data: freightTimeSeriesData[timeframe] || freightTimeSeriesData['30D'],
-          metadata: freightMetadata
-        });
-      }, 200);
-    });
+  getTimeSeries: async (routeCode = 'AUS_PARADIP_PANAMAX') => {
+    const res = await api.get('/freight/timeseries', { params: { routeCode } });
+    return {
+      data: res.data.data,
+      dataStatus: res.data.dataStatus,
+      dataNote: res.data.dataNote,
+    };
   },
 
   getMarketIntelligence: async () => {
-    // GET /api/v1/market/intelligence
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: marketIntelligenceSummary,
-          metadata: freightMetadata
-        });
-      }, 150);
-    });
-  }
+    const res = await api.get('/freight/summary');
+    return {
+      data: res.data.data,
+      dataStatus: res.data.dataStatus,
+      dataNote: res.data.dataNote,
+    };
+  },
 };

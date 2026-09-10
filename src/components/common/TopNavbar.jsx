@@ -3,16 +3,29 @@ import { Menu, Search, Bell, Sun, Moon, Globe, ChevronDown, User, LogOut, Settin
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import { NotificationDrawer } from './NotificationDrawer';
 
 export const TopNavbar = ({ onOpenMobile }) => {
   const { theme, toggleTheme } = useTheme();
   const { language, changeLanguage, t } = useLanguage();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const fullName = user?.fullName || 'Khushi Soni';
+  const designation = user?.designation || 'Logistics Manager';
+  const organization = user?.organization || 'SAIL Logistics Division';
+  const initials = fullName
+    .split(' ')
+    .filter(Boolean)
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || 'KS';
 
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -143,11 +156,11 @@ export const TopNavbar = ({ onOpenMobile }) => {
               className="flex items-center gap-2 px-2 py-1 rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/10"
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-md shrink-0">
-                KS
+                {initials}
               </div>
               <div className="text-left hidden sm:block">
-                <div className="text-xs font-bold" style={{ color: 'var(--color-text-primary)' }}>Khushi Soni</div>
-                <div className="text-[10px] font-medium" style={{ color: 'var(--color-text-tertiary)' }}>Logistics Manager</div>
+                <div className="text-xs font-bold" style={{ color: 'var(--color-text-primary)' }}>{fullName}</div>
+                <div className="text-[10px] font-medium" style={{ color: 'var(--color-text-tertiary)' }}>{designation}</div>
               </div>
               <ChevronDown size={13} style={{ color: 'var(--color-text-muted)' }} className="hidden sm:block" />
             </button>
@@ -158,8 +171,8 @@ export const TopNavbar = ({ onOpenMobile }) => {
                 style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border)' }}
               >
                 <div className="px-3 py-2 mb-1" style={{ borderBottom: '1px solid var(--color-border)' }}>
-                  <div className="text-xs font-bold" style={{ color: 'var(--color-text-primary)' }}>Khushi Soni</div>
-                  <div className="text-[10px] font-medium" style={{ color: 'var(--color-text-tertiary)' }}>SAIL Logistics Division</div>
+                  <div className="text-xs font-bold" style={{ color: 'var(--color-text-primary)' }}>{fullName}</div>
+                  <div className="text-[10px] font-medium" style={{ color: 'var(--color-text-tertiary)' }}>{organization}</div>
                 </div>
                 <button
                   onClick={() => { navigate('/settings'); setIsProfileOpen(false); }}
@@ -170,7 +183,7 @@ export const TopNavbar = ({ onOpenMobile }) => {
                   <span>{t('nav.settings')}</span>
                 </button>
                 <button
-                  onClick={() => { navigate('/login'); setIsProfileOpen(false); }}
+                  onClick={() => { logout(); navigate('/login'); setIsProfileOpen(false); }}
                   className="w-full text-left px-3 py-2 text-xs rounded-md flex items-center gap-2 transition-colors text-rose-500 hover:bg-rose-500/10"
                 >
                   <LogOut size={14} />

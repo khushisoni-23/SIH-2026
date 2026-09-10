@@ -28,10 +28,17 @@ export const VesselRecommendation = () => {
 
   const fetchRecommendations = async (params) => {
     setLoading(true);
-    const res = await vesselService.getVessels(params);
-    setVesselData(res.data);
-    setRecommendedVessel(res.recommendedVessel);
-    setLoading(false);
+    try {
+      const res = await vesselService.getVessels(params);
+      if (res && res.data) {
+        setVesselData(res.data);
+        setRecommendedVessel(res.recommendedVessel);
+      }
+    } catch (err) {
+      console.warn("Vessel recommendations API call failed:", err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

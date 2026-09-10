@@ -1,24 +1,17 @@
-import { mockRoutes, routeMetadata } from '../data/mockRouteData';
+/**
+ * routeService — fetches from Express backend (GET /api/routes)
+ * Mock data imports have been removed.
+ */
+import api from './api';
 
 export const routeService = {
   getRoutes: async (search = '') => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let data = [...mockRoutes];
-        if (search) {
-          const s = search.toLowerCase();
-          data = data.filter(r => 
-            r.origin.toLowerCase().includes(s) || 
-            r.destination.toLowerCase().includes(s) || 
-            r.commodity.toLowerCase().includes(s)
-          );
-        }
-        resolve({
-          data,
-          primaryRoute: mockRoutes[0],
-          metadata: routeMetadata
-        });
-      }, 150);
-    });
-  }
+    const res = await api.get('/routes', { params: search ? { search } : {} });
+    return {
+      data: res.data.data,
+      primaryRoute: res.data.primaryRoute,
+      dataStatus: res.data.dataStatus,
+      dataNote: res.data.dataNote,
+    };
+  },
 };
