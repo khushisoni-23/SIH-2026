@@ -234,6 +234,11 @@ export const Login = () => {
           </div>
 
           <div className={`mt-6 pt-4 border-t text-center text-xs ${isLight ? 'border-slate-200 text-slate-500' : 'border-slate-800 text-slate-400'}`}>
+            New to FreightSense?{' '}
+            <Link to="/signup" className="text-cyan-600 dark:text-cyan-400 font-semibold no-underline hover:underline">
+              Create enterprise account →
+            </Link>
+            <span className="mx-2">·</span>
             <Link to="/" className="text-cyan-600 dark:text-cyan-400 font-semibold no-underline hover:underline">
               ← Return to FreightSense Landing Page
             </Link>

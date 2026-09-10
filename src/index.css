@@ -201,9 +201,11 @@
 }
 
 .fs-card:hover,
-.glass-card:hover {
+.glass-card:hover,
+.glass-card-hover:hover {
   border-color: var(--color-border-hover);
   box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px) scale(1.012);
 }
 
 .glass-panel {
@@ -446,8 +448,19 @@
 }
 
 .light main .preserve-dark .text-slate-300,
-.light main .preserve-dark .text-slate-400 {
-  color: #cbd5e1 !important;
+.light main .preserve-dark .text-slate-400,
+.light main .preserve-dark .text-slate-50,
+.light main .preserve-dark .text-slate-100,
+.light main .preserve-dark .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+.light main .preserve-dark .bg-slate-900,
+.light main .preserve-dark .bg-slate-900\/90,
+.light main .preserve-dark .bg-slate-800,
+.light main .preserve-dark .bg-slate-800\/80 {
+  background-color: rgba(2, 8, 23, 0.72) !important;
+  border-color: rgba(34, 211, 238, 0.22) !important;
 }
 
 .light main .preserve-dark .text-emerald-300,
@@ -497,28 +510,28 @@
   color: #64748b !important;
 }
 
-/* Background cards in Light Mode */
-.light main .bg-slate-900,
-.light main .bg-slate-950,
-.light main .bg-slate-900\/80,
-.light main .bg-slate-950\/80,
-.light main .bg-slate-950\/90,
-.light main .bg-slate-900\/70,
-.light main .bg-slate-900\/60,
-.light main .bg-slate-950\/60,
-.light main .bg-slate-950\/70,
-.light main .bg-slate-950\/95,
-.light main .bg-slate-900\/90 {
+/* Background cards in Light Mode (skip preserve-dark banners) */
+.light main .bg-slate-900:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-950:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-900\/80:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-950\/80:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-950\/90:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-900\/70:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-900\/60:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-950\/60:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-950\/70:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-950\/95:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-900\/90:not(.preserve-dark):not(.preserve-dark *) {
   background-color: #ffffff !important;
   border-color: #e2e8f0 !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
-.light main .bg-slate-800,
-.light main .bg-slate-800\/80,
-.light main .bg-slate-800\/60,
-.light main .bg-slate-800\/40,
-.light main .bg-slate-800\/30 {
+.light main .bg-slate-800:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-800\/80:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-800\/60:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-800\/40:not(.preserve-dark):not(.preserve-dark *),
+.light main .bg-slate-800\/30:not(.preserve-dark):not(.preserve-dark *) {
   background-color: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
 }
@@ -622,3 +635,62 @@ aside * {
 .delay-300 { animation-delay: 0.3s; }
 .delay-400 { animation-delay: 0.4s; }
 .delay-500 { animation-delay: 0.5s; }
+
+/* ============================================================
+   FreightSense Global Card Hover Utilities
+   ============================================================ */
+
+/* Subtle lift + shadow — use on any interactive data card */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 12px 32px -8px rgba(6, 182, 212, 0.15);
+}
+
+/* Stronger lift for primary/featured cards */
+.card-hover-featured {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover-featured:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 48px -10px rgba(6, 182, 212, 0.25);
+}
+
+/* Glow border pulse for recommended/highlighted cards */
+.card-hover-glow {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-hover-glow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.4), 0 16px 40px -8px rgba(6, 182, 212, 0.2);
+  border-color: rgba(6, 182, 212, 0.5) !important;
+}
+
+/* Icon bounce on card hover */
+.card-icon-bounce {
+  transition: transform 0.25s ease;
+}
+.group:hover .card-icon-bounce {
+  transform: scale(1.15);
+}
+
+/* Glass card — enhanced for dark mode readability */
+.glass-card {
+  background: var(--color-bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ============================================================
+   Responsive spacing helpers
+   ============================================================ */
+@media (max-width: 640px) {
+  .card-hover:hover,
+  .card-hover-featured:hover,
+  .card-hover-glow:hover {
+    transform: none;
+  }
+}
+

@@ -138,26 +138,27 @@ export const VesselRecommendation = () => {
         <>
           {/* Highlighted Recommended Vessel Banner */}
           {recommendedVessel && (
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-cyan-950/80 via-[#1c2541] to-[#0f172a] border-2 border-cyan-500/50 shadow-2xl relative overflow-hidden space-y-4">
-              <div className="absolute right-0 top-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="p-6 rounded-2xl preserve-dark bg-gradient-to-r from-[#0c1f3a] via-[#0d2249] to-[#071428] border-2 border-cyan-400/70 shadow-2xl shadow-cyan-500/15 relative overflow-hidden space-y-4">
+              <div className="absolute right-0 top-0 w-72 h-72 bg-cyan-500/8 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -left-10 bottom-0 w-56 h-56 bg-blue-600/8 rounded-full blur-3xl pointer-events-none" />
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10 border-b border-slate-800 pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10 border-b border-slate-700/60 pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300">
+                  <div className="p-3 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300">
                     <Award size={28} />
                   </div>
                   <div>
-                    <span className="px-2.5 py-0.5 text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 rounded-full uppercase tracking-wider">
+                    <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 rounded-full uppercase tracking-wider">
                       PRIMARY SYSTEM RECOMMENDATION
                     </span>
-                    <h3 className="text-2xl font-black text-slate-100 tracking-tight mt-1 m-0">
+                    <h3 className="text-2xl font-black text-white tracking-tight mt-1 m-0" style={{ color: '#ffffff' }}>
                       {recommendedVessel.class} Class Bulk Carrier
                     </h3>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-xs text-slate-400 font-semibold uppercase">Suitability Score</div>
+                  <div className="text-xs text-slate-300 font-semibold uppercase tracking-wider">Suitability Score</div>
                   <div className="text-3xl font-extrabold text-cyan-300 font-mono">
                     {recommendedVessel.suitabilityScore} <span className="text-sm font-normal text-slate-400">/ 100</span>
                   </div>
@@ -167,9 +168,9 @@ export const VesselRecommendation = () => {
               {/* Reasons Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 relative z-10">
                 {recommendedVessel.reasons.map((reason, idx) => (
-                  <div key={idx} className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 flex items-start gap-2">
+                  <div key={idx} className="p-3 rounded-xl bg-slate-900/90 border border-cyan-400/20 text-xs text-slate-50 flex items-start gap-2">
                     <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                    <span>{reason.replace(/^[✓!✗]\s*/, '')}</span>
+                    <span className="leading-relaxed font-medium" style={{ color: '#f1f5f9' }}>{reason.replace(/^[✓!✗]\s*/, '')}</span>
                   </div>
                 ))}
               </div>
@@ -183,10 +184,10 @@ export const VesselRecommendation = () => {
               return (
                 <div
                   key={vessel.id}
-                  className={`glass-card rounded-xl p-5 border flex flex-col justify-between relative transition-all duration-200 ${
+                  className={`glass-card card-hover-glow rounded-xl p-5 border flex flex-col justify-between relative transition-all duration-300 cursor-pointer group hover:scale-[1.03] ${
                     isRec
-                      ? 'border-cyan-500 shadow-xl shadow-cyan-500/10 bg-cyan-950/20'
-                      : 'border-slate-800 hover:border-slate-700'
+                      ? 'border-cyan-500 shadow-xl shadow-cyan-500/10 bg-cyan-950/20 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/25'
+                      : 'border-slate-800 hover:border-cyan-400/50 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-cyan-500/15'
                   }`}
                 >
                   {isRec && (

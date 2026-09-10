@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 
 import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
 import { LandingPage } from './pages/LandingPage';
 import { MainLayout } from './layouts/MainLayout';
 import { Dashboard } from './pages/Dashboard';
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
             {/* Protected Main Application Routes inside MainLayout */}
             <Route element={<MainLayout />}>

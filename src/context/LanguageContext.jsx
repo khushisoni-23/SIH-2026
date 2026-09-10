@@ -15,6 +15,10 @@ export const LanguageProvider = ({ children }) => {
     }
   });
 
+  useEffect(() => {
+    document.documentElement.lang = language === 'hi' ? 'hi' : 'en';
+  }, [language]);
+
   const changeLanguage = (lang) => {
     const targetLang = lang === 'hi' ? 'hi' : 'en';
     setLanguageState(targetLang);

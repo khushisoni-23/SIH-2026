@@ -13,7 +13,7 @@ export const ChartCard = ({
   actions
 }) => {
   return (
-    <div className="glass-card rounded-xl p-5 border border-slate-800 flex flex-col justify-between">
+    <div className="glass-card card-hover rounded-xl p-5 border border-slate-800 flex flex-col justify-between">
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div>
