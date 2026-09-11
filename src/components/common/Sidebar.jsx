@@ -45,7 +45,7 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
         } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center justify-between px-4 border-b sidebar-border" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.18), rgba(15, 23, 42, 0))' }}>
+        <div className={`relative h-16 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between px-4'} border-b sidebar-border`} style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.18), rgba(15, 23, 42, 0))' }}>
           <NavLink to="/" className="flex items-center gap-2.5 overflow-hidden" onClick={closeMobile}>
             <div className="w-9 h-9 rounded-xl border border-cyan-300/40 bg-gradient-to-br from-cyan-400 via-sky-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 ring-1 ring-white/10 shrink-0">
               <Ship className="w-5 h-5 drop-shadow-[0_1px_1px_rgba(15,23,42,0.6)]" />
@@ -60,21 +60,33 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
             )}
           </NavLink>
 
-          <div className="flex items-center gap-1">
+          {!isCollapsed && (
+            <div className="flex items-center gap-1">
+              <button
+                onClick={toggleSidebar}
+                className="hidden lg:flex p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                title="Collapse"
+              >
+                <ChevronLeft size={15} />
+              </button>
+              <button
+                onClick={closeMobile}
+                className="lg:hidden p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          )}
+
+          {isCollapsed && (
             <button
               onClick={toggleSidebar}
-              className="hidden lg:flex p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
-              title={isCollapsed ? "Expand" : "Collapse"}
+              className="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-3.5 z-50 p-1 rounded-full bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-600 shadow-md transition-colors"
+              title="Expand"
             >
-              {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
+              <ChevronRight size={14} />
             </button>
-            <button
-              onClick={closeMobile}
-              className="lg:hidden p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              <X size={15} />
-            </button>
-          </div>
+          )}
         </div>
 
         {/* Navigation */}
@@ -87,7 +99,9 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
                 to={item.path}
                 onClick={closeMobile}
                 className={({ isActive }) =>
-                  `flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${
+                  `flex items-center gap-2.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 group relative ${
+                    isCollapsed ? 'justify-center px-0 mx-2' : 'px-3'
+                  } ${
                     isActive
                       ? 'bg-gradient-to-r from-cyan-500/20 to-blue-600/15 text-white shadow-md shadow-blue-900/30 border border-cyan-400/30'
                       : 'text-slate-300 hover:text-white hover:bg-white/8'
@@ -121,7 +135,9 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
             to="/settings"
             onClick={closeMobile}
             className={({ isActive }) =>
-              `flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
+              `flex items-center gap-2.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                isCollapsed ? 'justify-center px-0 mx-2' : 'px-3'
+              } ${
                 isActive
                   ? 'bg-gradient-to-r from-cyan-500/20 to-blue-600/15 text-white shadow-md border border-cyan-400/30'
                   : 'text-slate-300 hover:text-white hover:bg-white/8'
@@ -134,7 +150,9 @@ export const Sidebar = ({ isCollapsed, toggleSidebar, isMobileOpen, closeMobile 
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-rose-400 hover:bg-rose-500/10 transition-all duration-200"
+            className={`w-full flex items-center gap-2.5 py-2 rounded-lg text-[13px] font-medium text-rose-400 hover:bg-rose-500/10 transition-all duration-200 ${
+              isCollapsed ? 'justify-center px-0 mx-2 w-auto' : 'px-3'
+            }`}
           >
             <LogOut size={17} className="shrink-0" />
             {!isCollapsed && <span>{t('nav.logout')}</span>}

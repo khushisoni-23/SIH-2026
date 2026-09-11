@@ -47,22 +47,55 @@ app.use(errorHandler);
 // --- Connect to MongoDB then start server ---
 const PORT = process.env.PORT || 5001;
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅  MongoDB connected → freightsense');
-    const server = app.listen(PORT, () => {
-      console.log(`🚀  FreightSense backend running on http://localhost:${PORT}`);
-    });
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(`⚠️  Port ${PORT} is busy. Clearing port and restarting...`);
-      } else {
-        console.error('Server error:', err);
-      }
-    });
-  })
-  .catch((err) => {
-    console.error('❌  MongoDB connection error:', err.message);
-    process.exit(1);
+const startServer = () => {
+  const server = app.listen(PORT, () => {
+    console.log(`🚀  FreightSense backend running on http://localhost:${PORT}`);
   });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`⚠️  Port ${PORT} is busy. Clearing port and restarting...`);
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+};
+
+const getMongoURIs = () => {
+  const candidates = [
+    process.env.MONGODB_URI,
+    'mongodb://127.0.0.1:27017/freightsense',
+  ];
+
+  return [...new Set(candidates.filter(Boolean))];
+};
+
+const connectMongoDB = async () => {
+  const uris = getMongoURIs();
+
+  if (uris.length === 0) {
+    console.warn('⚠️  No MONGODB_URI found. Starting backend in demo mode.');
+    startServer();
+    return;
+  }
+
+  let lastError = null;
+
+  for (const uri of uris) {
+    try {
+      await mongoose.connect(uri);
+      console.log(`✅  MongoDB connected → freightsense (${uri})`);
+      startServer();
+      return;
+    } catch (err) {
+      lastError = err;
+      console.warn(`⚠️  MongoDB connection failed for ${uri}: ${err.message}`);
+    }
+  }
+
+  console.error('❌  MongoDB connection error:', lastError?.message || 'Unable to connect to MongoDB');
+  console.warn('⚠️  Starting backend in demo mode without database.');
+  startServer();
+};
+
+connectMongoDB();

@@ -50,13 +50,13 @@ export const Login = () => {
         
         {/* Left Side: Product Branding & Maritime Visual */}
         <div
-          className="lg:col-span-6 p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800 text-white"
+          className="lg:col-span-6 p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-800 text-white isolate"
           style={{
             backgroundImage:
-              'linear-gradient(135deg, rgba(8,22,43,0.92), rgba(10,26,48,0.82) 32%, rgba(4,11,24,0.78)), radial-gradient(circle at top right, rgba(103,232,249,0.28), transparent 26%), radial-gradient(circle at bottom left, rgba(59,130,246,0.24), transparent 30%), url("/images/hero-ship.jpg")',
+              'linear-gradient(135deg, rgba(8,22,43,0.90), rgba(10,26,48,0.76) 32%, rgba(4,11,24,0.82)), url("/images/hero-ship.jpg")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundBlendMode: 'screen, normal, normal, normal'
+            backgroundBlendMode: 'normal'
           }}
         >
           <div
@@ -67,6 +67,8 @@ export const Login = () => {
               backgroundPosition: 'center'
             }}
           />
+          <div className="absolute inset-0 bg-slate-950/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-900/25 to-slate-950/60" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.14),transparent_25%)]" />
           <div className="absolute inset-y-4 left-4 w-20 border-l border-t border-white/10 rounded-tl-2xl opacity-60" />
           <div className="absolute inset-y-4 right-4 w-20 border-r border-b border-white/10 rounded-br-2xl opacity-60" />
@@ -93,10 +95,16 @@ export const Login = () => {
               SIH 2026 Enterprise Procurement System
             </div>
 
-            <h2 className="text-2xl lg:text-3xl font-black text-white leading-tight mb-3">
+            <h2
+              className="text-2xl lg:text-3xl font-black text-white leading-tight mb-3"
+              style={{ textShadow: '0 2px 12px rgba(2, 6, 23, 0.9)' }}
+            >
               Intelligent Freight Forecasting &amp; Vessel Chartering
             </h2>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-md">
+            <p
+              className="text-xs text-slate-200 leading-relaxed max-w-md"
+              style={{ textShadow: '0 2px 10px rgba(2, 6, 23, 0.8)' }}
+            >
               Official maritime decision support platform for Steel Authority of India (SAIL) &amp; Ministry of Steel overseas raw material procurement.
             </p>
           </div>
